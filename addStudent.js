@@ -6,12 +6,20 @@ import {
   estudiantes,
 } from "./informacionEstudiante.js";
 
+const contenedorTarjeta = document.querySelector(
+  ".tarjeta-estudiante__container"
+);
+
+const formulario = document.querySelector(".form");
+
 button.addEventListener("click", () => {
   let error = comprobacion();
   if (error) {
     return;
   } else {
     addStudent();
+    createCard();
+    resetearForm();
   }
 });
 
@@ -79,4 +87,45 @@ const addStudent = () => {
   estudiantes.push([estudiante.nombre, estudiante.apellido, estudiante.email]);
   console.log("Estado Actual de la Lista:");
   console.log(...estudiantes);
+};
+
+const createCard = () => {
+  const estudiante = formatear();
+  let fragmento = document.createDocumentFragment();
+  const contenedor = document.createElement("ARTICLE");
+  contenedor.classList.add("tarjeta-estudiante");
+  const img = document.createElement("IMG");
+  img.classList.add("tarjeta-estudiante__img", "imagen");
+  img.src = "/img_prueba.jpg";
+  const nombre = document.createElement("H2");
+  nombre.classList.add("tarjeta-estudiante__titulo", "nombre");
+  nombre.textContent = `Nombre: ${mayuscula(estudiante.nombre)}`;
+  const apellido = document.createElement("H3");
+  apellido.classList.add("tarjeta-estudiante__subtitulo", "apellido");
+  apellido.textContent = `Apellido: ${mayuscula(estudiante.apellido)}`;
+  const email = document.createElement("H3");
+  email.classList.add("tarjeta-estudiante__subtitulo", "email");
+  email.textContent = ` Correo Electrónico: ${estudiante.email}`;
+  for (let i = 0; i < 4; i++) {
+    const div = document.createElement("DIV");
+    div.classList.add("tarjeta-estudiante__div");
+    contenedor.appendChild(div);
+    if (i == 0) {
+      div.appendChild(img);
+    } else if (i == 1) {
+      div.appendChild(nombre);
+    } else if (i == 2) {
+      div.appendChild(apellido);
+    } else if (i == 3) {
+      div.appendChild(email);
+    }
+  }
+
+  fragmento.appendChild(contenedor);
+  contenedorTarjeta.appendChild(fragmento);
+  alert("Se ha generado una tarjeta de estudiante");
+};
+
+const mayuscula = (text) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 };
